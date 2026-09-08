@@ -30,8 +30,8 @@ const onlineProductImages={
  ],
  wheel:[
   'https://www.cuttingdiscfactory.com/cuttingdiscfactory/2024/08/23/196a9632.jpg',
-  'https://www.gettyimages.com/',
-  'https://www.kerryabrasives.com/wp-content/uploads/Ultra-Thin-Cut-Off-Wheels-English.pdf'
+  'https://multimedia.3m.com/mws/media/2306025J/3m-green-corps-cut-off-wheel-out-of-package.jpg',
+  'https://multimedia.3m.com/mws/media/424849J/3m-green-corps-cut-off-wheels.jpg'
  ]
 };
 function injectOnlineProductGallery(){
