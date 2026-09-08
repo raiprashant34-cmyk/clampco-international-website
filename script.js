@@ -12,8 +12,8 @@ const productMenu=[
 ];
 
 function buildProductMenu(){
- document.querySelectorAll('.products-nav-link').forEach(link=>{
-  if(link.parentElement.classList.contains('nav-dropdown'))return;
+ document.querySelectorAll('.products-nav-link,.nav a[href="products.html"]').forEach(link=>{
+  if(link.closest('.nav-dropdown'))return;
   const wrap=document.createElement('div');wrap.className='nav-dropdown';
   const button=document.createElement('button');button.className='nav-products-button';button.type='button';button.innerHTML='Products <span>⌄</span>';
   const panel=document.createElement('div');panel.className='nav-product-panel';
@@ -30,17 +30,12 @@ function buildProductMenu(){
  });
 }
 buildProductMenu();
-
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown'))document.querySelectorAll('.nav-dropdown.open').forEach(x=>x.classList.remove('open'));});
 document.querySelectorAll('.nav a').forEach(link=>link.addEventListener('click',()=>nav?.classList.remove('open')));
 
 const productCta=document.querySelector('.hero-actions .btn.primary');if(productCta&&(location.pathname.endsWith('/index.html')||location.pathname.endsWith('/')))productCta.href='products.html';
-
 const productSections=['welding','wires','abrasives','fasteners','hvac','vibration'];document.querySelectorAll('.product-family .text-link').forEach((link,index)=>{if(productSections[index])link.href=`products.html#${productSections[index]}`;});
-
 const detailLinks={'Mild Steel':'e6013','Low Hydrogen':'e7018','Stainless Steel':'e308l-electrode','Carbon steel MIG':'er70s6','Stainless MIG / TIG':'er308l','Aluminium':'er4043','Cutting Wheels':'cutoff','Grinding Wheels':'grinding','Bolts & Studs':'hex-bolt','Pipe Supports':'pipe-clamp','Channel Systems':'strut-channel','Rubber Isolation':'rubber-mount','Spring Isolation':'spring-isolator'};
 document.querySelectorAll('.detail-card').forEach(card=>{const heading=card.querySelector('h3');if(!heading||card.querySelector('.detail-link'))return;const slug=detailLinks[heading.textContent.trim()];if(slug){const a=document.createElement('a');a.className='text-link detail-link';a.href=`product.html?product=${slug}`;a.textContent='View product details →';card.appendChild(a);}});
-
 document.querySelectorAll('.category-toggle').forEach(btn=>{btn.addEventListener('click',()=>{const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!open));btn.nextElementSibling?.classList.toggle('open',!open);});});
-
 document.querySelectorAll('.enquiry-form').forEach(form=>{if((form.getAttribute('action')||'').startsWith('mailto:'))return;form.addEventListener('submit',event=>{event.preventDefault();alert('Thank you. Your enquiry form is ready; connect it to a dedicated form service before launch.');});});
