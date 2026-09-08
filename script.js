@@ -18,21 +18,9 @@ document.querySelectorAll('.enquiry-form').forEach(form=>{if((form.getAttribute(
 
 // Temporary online reference photography. These are generic/reference images only and are not CLAMPCO product photography.
 const onlineProductImages={
- welding:[
-  'https://mapleweld.ca/cdn/shop/files/6013_1024x1024.png?v=1739194463',
-  'https://www.weldmaterial.com/Uploads/696c410a4b45b.jpg',
-  'https://weldingcity-usa.com/cdn/shop/products/E308L-16_no_logo.jpg?v=1669821878'
- ],
- wire:[
-  'https://static.grainger.com/rp/s/is/image/Grainger/30XN90_GC01?%24adapimg%24=&hei=536&wid=536',
-  'https://www.airgas.com/medias/HAR-0308LH8-B.jpg-1200Wx1200H?context=bWFzdGVyfHJvb3R8MzAzMDI4fGltYWdlL2pwZWd8aDA2L2g3NC8xMTg4MDA4MzM5MDQ5NC5qcGd8OTNmMmUxNTc3NmQ4MmRjYzBiMmJlZTkxY2NlYTIzMjU3ZjQ1ZjZmNTA0M2ZkOWJjMDRiZmQ4Njg1MTgzNTlmYQ',
-  'https://down-br.img.susercontent.com/file/br-11134207-7r98o-mdnc071zqlrt1b'
- ],
- wheel:[
-  'https://www.cuttingdiscfactory.com/cuttingdiscfactory/2024/08/23/196a9632.jpg',
-  'https://multimedia.3m.com/mws/media/2306025J/3m-green-corps-cut-off-wheel-out-of-package.jpg',
-  'https://multimedia.3m.com/mws/media/424849J/3m-green-corps-cut-off-wheels.jpg'
- ]
+ welding:['https://mapleweld.ca/cdn/shop/files/6013_1024x1024.png?v=1739194463','https://www.weldmaterial.com/Uploads/696c410a4b45b.jpg','https://weldingcity-usa.com/cdn/shop/products/E308L-16_no_logo.jpg?v=1669821878'],
+ wire:['https://static.grainger.com/rp/s/is/image/Grainger/30XN90_GC01?%24adapimg%24=&hei=536&wid=536','https://www.airgas.com/medias/HAR-0308LH8-B.jpg-1200Wx1200H?context=bWFzdGVyfHJvb3R8MzAzMDI4fGltYWdlL2pwZWd8aDA2L2g3NC8xMTg4MDA4MzM5MDQ5NC5qcGd8OTNmMmUxNTc3NmQ4MmRjYzBiMmJlZTkxY2NlYTIzMjU3ZjQ1ZjZmNTA0M2ZkOWJjMDRiZmQ4Njg1MTgzNTlmYQ','https://down-br.img.susercontent.com/file/br-11134207-7r98o-mdnc071zqlrt1b'],
+ wheel:['https://www.cuttingdiscfactory.com/cuttingdiscfactory/2024/08/23/196a9632.jpg','https://multimedia.3m.com/mws/media/2306025J/3m-green-corps-cut-off-wheel-out-of-package.jpg','https://multimedia.3m.com/mws/media/424849J/3m-green-corps-cut-off-wheels.jpg']
 };
 function injectOnlineProductGallery(){
  const root=document.getElementById('product-detail');
@@ -43,14 +31,11 @@ function injectOnlineProductGallery(){
  const kind=placeholder.className.match(/(welding|wire|wheel)-detail-art/)?.[1];
  if(!kind||!onlineProductImages[kind])return;
  root.dataset.galleryReady='true';
+ if(!document.querySelector('link[href="online-product-gallery.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='online-product-gallery.css';document.head.appendChild(css);}
  const urls=onlineProductImages[kind];
  const gallery=document.createElement('div');
  gallery.className='online-product-gallery';
  gallery.innerHTML=`<div class="online-gallery-head"><div><span class="eyebrow">PRODUCT REFERENCE IMAGES</span><h3>Visual reference for ${slug.toUpperCase()}</h3></div><span class="reference-badge">TEMPORARY ONLINE REFERENCE</span></div><div class="online-gallery-grid">${urls.map((url,i)=>`<figure><div class="online-image-wrap"><img src="${url}" alt="${slug.toUpperCase()} product reference image ${i+1}" loading="lazy" referrerpolicy="no-referrer"><span>Reference image</span></div><figcaption>Reference view ${i+1} · Final CLAMPCO photography will replace this image.</figcaption></figure>`).join('')}</div><p class="online-gallery-note">These images are used temporarily for website layout and product-reference presentation. They are not representations of final CLAMPCO packaging, branding or exact supplied configuration.</p>`;
  placeholder.replaceWith(gallery);
 }
-if(document.getElementById('product-detail')){
- const observer=new MutationObserver(injectOnlineProductGallery);
- observer.observe(document.getElementById('product-detail'),{childList:true,subtree:true});
- setTimeout(injectOnlineProductGallery,100);
-}
+if(document.getElementById('product-detail')){const observer=new MutationObserver(injectOnlineProductGallery);observer.observe(document.getElementById('product-detail'),{childList:true,subtree:true});setTimeout(injectOnlineProductGallery,100);}
