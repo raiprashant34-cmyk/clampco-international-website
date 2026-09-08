@@ -1,0 +1,1 @@
+Temporary online reference product images are used in the product gallery and should be replaced with approved CLAMPCO photography before launch.
