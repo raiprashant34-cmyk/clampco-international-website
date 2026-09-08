@@ -1,0 +1,1 @@
+const galleryCss=document.createElement('link');galleryCss.rel='stylesheet';galleryCss.href='product-gallery.css';document.head.appendChild(galleryCss);const galleryJs=document.createElement('script');galleryJs.src='product-gallery.js';document.head.appendChild(galleryJs);
