@@ -1,5 +1,46 @@
-const menuToggle=document.querySelector('.menu-toggle');const nav=document.querySelector('.nav');menuToggle?.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuToggle.setAttribute('aria-expanded',String(open));});document.querySelectorAll('.nav a').forEach(link=>link.addEventListener('click',()=>nav?.classList.remove('open')));
+const menuToggle=document.querySelector('.menu-toggle');
+const nav=document.querySelector('.nav');
+menuToggle?.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuToggle.setAttribute('aria-expanded',String(open));});
+
+const productMenu=[
+['Welding Electrodes',[['E6013','e6013'],['E7018','e7018'],['E7016','e7016'],['E308L','e308l-electrode'],['E309L','e309l-electrode'],['E316L','e316l-electrode'],['Hardfacing','hardfacing'],['Cast Iron','cast-iron']]],
+['MIG / TIG / FCAW / SAW Wires',[['ER70S-6','er70s6'],['ER70S-2','er70s2'],['ER308L','er308l'],['ER309L','er309l'],['ER316L','er316l'],['ER4043','er4043'],['ER5356','er5356'],['E71T Series','e71t1'],['EM12K','em12k']]],
+['Cutting & Grinding Wheels',[['Cut-Off Wheels','cutoff'],['Grinding Wheels','grinding'],['Ultra-Thin Wheels','ultrathin'],['Flap Discs','flap-disc'],['Fibre Discs','fibre-disc']]],
+['Industrial Fasteners',[['Hex Bolts','hex-bolt'],['Stud Bolts','stud-bolt'],['U-Bolts','u-bolt'],['Hex Nuts','hex-nut'],['Washers','washer'],['Threaded Rods','threaded-rod']]],
+['HVAC Products',[['Pipe Clamps','pipe-clamp'],['Rubber-Lined Clamps','rubber-lined-clamp'],['Split Clamps','split-clamp'],['Pipe Hangers','pipe-hanger'],['Strut Channels','strut-channel'],['Beam Clamps','beam-clamp']]],
+['Anti-Vibration Products',[['Rubber Mounts','rubber-mount'],['Spring Isolators','spring-isolator'],['Spring Hangers','spring-hanger'],['Neoprene Pads','neoprene-pad'],['Machine Mounts','machine-mount'],['Shock Mounts','shock-mount']]]
+];
+
+function buildProductMenu(){
+ document.querySelectorAll('.products-nav-link').forEach(link=>{
+  if(link.parentElement.classList.contains('nav-dropdown'))return;
+  const wrap=document.createElement('div');wrap.className='nav-dropdown';
+  const button=document.createElement('button');button.className='nav-products-button';button.type='button';button.innerHTML='Products <span>⌄</span>';
+  const panel=document.createElement('div');panel.className='nav-product-panel';
+  productMenu.forEach(([cat,items])=>{
+   const branch=document.createElement('div');branch.className='nav-product-branch';
+   const catBtn=document.createElement('button');catBtn.type='button';catBtn.className='nav-category-button';catBtn.innerHTML=`<span>${cat}</span><b>›</b>`;
+   const list=document.createElement('div');list.className='nav-product-list';
+   items.forEach(([name,slug])=>{const a=document.createElement('a');a.href=`product.html?product=${slug}`;a.textContent=name;list.appendChild(a);});
+   catBtn.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.nav-product-branch.open').forEach(x=>{if(x!==branch)x.classList.remove('open');});branch.classList.toggle('open');});
+   branch.append(catBtn,list);panel.appendChild(branch);
+  });
+  button.addEventListener('click',e=>{e.stopPropagation();wrap.classList.toggle('open');});
+  wrap.append(button,panel);link.replaceWith(wrap);
+ });
+}
+buildProductMenu();
+
+document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown'))document.querySelectorAll('.nav-dropdown.open').forEach(x=>x.classList.remove('open'));});
+document.querySelectorAll('.nav a').forEach(link=>link.addEventListener('click',()=>nav?.classList.remove('open')));
+
 const productCta=document.querySelector('.hero-actions .btn.primary');if(productCta&&(location.pathname.endsWith('/index.html')||location.pathname.endsWith('/')))productCta.href='products.html';
+
 const productSections=['welding','wires','abrasives','fasteners','hvac','vibration'];document.querySelectorAll('.product-family .text-link').forEach((link,index)=>{if(productSections[index])link.href=`products.html#${productSections[index]}`;});
-const detailLinks={'Mild Steel':'e6013','Low Hydrogen':'e7018','Stainless Steel':'er308l','Carbon steel MIG':'er70s6','Stainless MIG / TIG':'er308l','Aluminium':'er4043','Cutting Wheels':'cutoff','Grinding Wheels':'grinding','Bolts & Studs':'hex-bolt','Pipe Supports':'pipe-clamp','Channel Systems':'strut-channel','Rubber Isolation':'rubber-mount','Spring Isolation':'spring-isolator'};document.querySelectorAll('.detail-card').forEach(card=>{const heading=card.querySelector('h3');if(!heading||card.querySelector('.detail-link'))return;const slug=detailLinks[heading.textContent.trim()];if(slug){const a=document.createElement('a');a.className='text-link detail-link';a.href=`product.html?product=${slug}`;a.textContent='View product details →';card.appendChild(a);}});
+
+const detailLinks={'Mild Steel':'e6013','Low Hydrogen':'e7018','Stainless Steel':'e308l-electrode','Carbon steel MIG':'er70s6','Stainless MIG / TIG':'er308l','Aluminium':'er4043','Cutting Wheels':'cutoff','Grinding Wheels':'grinding','Bolts & Studs':'hex-bolt','Pipe Supports':'pipe-clamp','Channel Systems':'strut-channel','Rubber Isolation':'rubber-mount','Spring Isolation':'spring-isolator'};
+document.querySelectorAll('.detail-card').forEach(card=>{const heading=card.querySelector('h3');if(!heading||card.querySelector('.detail-link'))return;const slug=detailLinks[heading.textContent.trim()];if(slug){const a=document.createElement('a');a.className='text-link detail-link';a.href=`product.html?product=${slug}`;a.textContent='View product details →';card.appendChild(a);}});
+
+document.querySelectorAll('.category-toggle').forEach(btn=>{btn.addEventListener('click',()=>{const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!open));btn.nextElementSibling?.classList.toggle('open',!open);});});
+
 document.querySelectorAll('.enquiry-form').forEach(form=>{if((form.getAttribute('action')||'').startsWith('mailto:'))return;form.addEventListener('submit',event=>{event.preventDefault();alert('Thank you. Your enquiry form is ready; connect it to a dedicated form service before launch.');});});
