@@ -22,20 +22,15 @@ const onlineProductImages={
  wire:['https://static.grainger.com/rp/s/is/image/Grainger/30XN90_GC01?%24adapimg%24=&hei=536&wid=536','https://www.airgas.com/medias/HAR-0308LH8-B.jpg-1200Wx1200H?context=bWFzdGVyfHJvb3R8MzAzMDI4fGltYWdlL2pwZWd8aDA2L2g3NC8xMTg4MDA4MzM5MDQ5NC5qcGd8OTNmMmUxNTc3NmQ4MmRjYzBiMmJlZTkxY2NlYTIzMjU3ZjQ1ZjZmNTA0M2ZkOWJjMDRiZmQ4Njg1MTgzNTlmYQ','https://down-br.img.susercontent.com/file/br-11134207-7r98o-mdnc071zqlrt1b'],
  wheel:['https://www.cuttingdiscfactory.com/cuttingdiscfactory/2024/08/23/196a9632.jpg','https://multimedia.3m.com/mws/media/2306025J/3m-green-corps-cut-off-wheel-out-of-package.jpg','https://multimedia.3m.com/mws/media/424849J/3m-green-corps-cut-off-wheels.jpg']
 };
-function injectOnlineProductGallery(){
- const root=document.getElementById('product-detail');
- if(!root||root.dataset.galleryReady==='true')return;
- const placeholder=root.querySelector('.product-image-placeholder');
- if(!placeholder)return;
- const slug=new URLSearchParams(location.search).get('product')||'';
- const kind=placeholder.className.match(/(welding|wire|wheel)-detail-art/)?.[1];
- if(!kind||!onlineProductImages[kind])return;
- root.dataset.galleryReady='true';
- if(!document.querySelector('link[href="online-product-gallery.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='online-product-gallery.css';document.head.appendChild(css);}
- const urls=onlineProductImages[kind];
- const gallery=document.createElement('div');
- gallery.className='online-product-gallery';
- gallery.innerHTML=`<div class="online-gallery-head"><div><span class="eyebrow">PRODUCT REFERENCE IMAGES</span><h3>Visual reference for ${slug.toUpperCase()}</h3></div><span class="reference-badge">TEMPORARY ONLINE REFERENCE</span></div><div class="online-gallery-grid">${urls.map((url,i)=>`<figure><div class="online-image-wrap"><img src="${url}" alt="${slug.toUpperCase()} product reference image ${i+1}" loading="lazy" referrerpolicy="no-referrer"><span>Reference image</span></div><figcaption>Reference view ${i+1} · Final CLAMPCO photography will replace this image.</figcaption></figure>`).join('')}</div><p class="online-gallery-note">These images are used temporarily for website layout and product-reference presentation. They are not representations of final CLAMPCO packaging, branding or exact supplied configuration.</p>`;
- placeholder.replaceWith(gallery);
-}
+function loadGalleryCss(){if(!document.querySelector('link[href="online-product-gallery.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='online-product-gallery.css';document.head.appendChild(css);}}
+function buildReferenceGallery(slug,kind,target){if(!target||target.querySelector('.online-product-gallery'))return;const urls=onlineProductImages[kind];if(!urls)return;loadGalleryCss();const gallery=document.createElement('div');gallery.className='online-product-gallery';gallery.innerHTML=`<div class="online-gallery-head"><div><span class="eyebrow">PRODUCT REFERENCE IMAGES</span><h3>Visual reference for ${slug.toUpperCase()}</h3></div><span class="reference-badge">TEMPORARY ONLINE REFERENCE</span></div><div class="online-gallery-grid">${urls.map((url,i)=>`<figure><div class="online-image-wrap"><img src="${url}" alt="${slug.toUpperCase()} product reference image ${i+1}" loading="lazy" referrerpolicy="no-referrer"><span>Reference image</span></div><figcaption>Reference view ${i+1} · Final CLAMPCO photography will replace this image.</figcaption></figure>`).join('')}</div><p class="online-gallery-note">These images are used temporarily for website layout and product-reference presentation. They are not representations of final CLAMPCO packaging, branding or exact supplied configuration.</p>`;target.appendChild(gallery);}
+function injectOnlineProductGallery(){const root=document.getElementById('product-detail');if(!root||root.dataset.galleryReady==='true')return;const placeholder=root.querySelector('.product-image-placeholder');if(!placeholder)return;const slug=new URLSearchParams(location.search).get('product')||'';const kind=placeholder.className.match(/(welding|wire|wheel)-detail-art/)?.[1];if(!kind||!onlineProductImages[kind])return;root.dataset.galleryReady='true';buildReferenceGallery(slug,kind,placeholder.parentElement);placeholder.replaceWith(placeholder);}
 if(document.getElementById('product-detail')){const observer=new MutationObserver(injectOnlineProductGallery);observer.observe(document.getElementById('product-detail'),{childList:true,subtree:true});setTimeout(injectOnlineProductGallery,100);}
+
+const featuredReferencePages={
+ 'product-e6013.html':['e6013','welding'],
+ 'product-e7018.html':['e7018','welding'],
+ 'product-e7016.html':['e7016','welding']
+};
+const featuredKey=Object.keys(featuredReferencePages).find(name=>location.pathname.endsWith('/'+name)||location.pathname.endsWith(name));
+if(featuredKey){const [slug,kind]=featuredReferencePages[featuredKey];const host=document.querySelector('.featured-grid .product-render');const section=host?.closest('.featured-hero')?.parentElement;if(section)buildReferenceGallery(slug,kind,section.querySelector('.featured-section .container')||section);}
