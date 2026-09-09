@@ -30,10 +30,32 @@ if(document.getElementById('product-detail')){const observer=new MutationObserve
 const featuredReferencePages={'product-e6013.html':['e6013','welding'],'product-e7018.html':['e7018','welding'],'product-e7016.html':['e7016','welding']};
 const featuredKey=Object.keys(featuredReferencePages).find(name=>location.pathname.endsWith('/'+name)||location.pathname.endsWith(name));
 if(featuredKey){const [slug,kind]=featuredReferencePages[featuredKey];const host=document.querySelector('.featured-grid .product-render');const section=host?.closest('.featured-hero')?.parentElement;if(section)buildReferenceGallery(slug,kind,section.querySelector('.featured-section .container')||section);}
-// Make all legacy enquiry/quote navigation links work directly and never scroll to #enquiry.
 document.querySelectorAll('.nav-cta, .nav a[href="#enquiry"], .featured-actions a[href="#enquiry"], a[href="#contact"]').forEach(link=>{link.setAttribute('href','rfq.html');link.addEventListener('click',event=>{event.preventDefault();window.location.assign('rfq.html');});});
-// Standardize visible quote CTA labels and remove duplicate bottom RFQ bands on featured product TDS pages.
 document.querySelectorAll('.featured-actions a.primary').forEach(link=>{link.textContent='Request a Quote';link.setAttribute('href','rfq.html');});
 document.querySelectorAll('.rfq-band').forEach(band=>{band.remove();});
-// Remove any accidental citation markers from legacy/generated HTML content.
 document.querySelectorAll('body *').forEach(el=>{el.childNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE&&n.textContent.includes(''))n.textContent=n.textContent.replace(/[^]*/g,'');});});
+
+// Final navigation normalization: every page uses the same main navigation.
+function normalizeMainNav(){
+  const mainNav=document.querySelector('.nav');
+  if(!mainNav)return;
+  mainNav.querySelectorAll('a').forEach(a=>{
+    const label=(a.textContent||'').trim().toLowerCase();
+    const href=(a.getAttribute('href')||'').toLowerCase();
+    if(label==='export'||href==='#export'||href==='index.html#export')a.remove();
+  });
+  let contact=Array.from(mainNav.querySelectorAll('a')).find(a=>(a.textContent||'').trim().toLowerCase()==='contact');
+  if(!contact){
+    contact=document.createElement('a');
+    contact.href='contact.html';
+    contact.textContent='Contact';
+    const cta=mainNav.querySelector('.nav-cta');
+    if(cta)mainNav.insertBefore(contact,cta);else mainNav.appendChild(contact);
+  }else{
+    contact.href='contact.html';
+    contact.textContent='Contact';
+  }
+  const industries=Array.from(mainNav.querySelectorAll('a')).find(a=>(a.textContent||'').trim().toLowerCase()==='industries');
+  if(industries){industries.href='industries.html';}
+}
+normalizeMainNav();
