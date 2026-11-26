@@ -1,0 +1,86 @@
+.clampco-consent[hidden],
+.clampco-consent-settings[hidden] {
+  display: none !important;
+}
+
+.clampco-consent {
+  position: fixed;
+  z-index: 10000;
+  left: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  width: min(440px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 22px;
+  color: #fff;
+  background: #151b20;
+  border: 1px solid #34414a;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, .25);
+  font-family: Inter, Arial, sans-serif;
+}
+.clampco-consent h2 {
+  margin: 0 0 9px;
+  font-size: 18px;
+  line-height: 1.25;
+}
+.clampco-consent p {
+  margin: 0 0 13px;
+  color: #c4ccd1;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.clampco-consent small {
+  display: block;
+  margin-top: 12px;
+  color: #a8b2b8;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.clampco-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 16px;
+}
+.clampco-consent button {
+  min-height: 40px;
+  padding: 10px 14px;
+  border: 1px solid #d9a441;
+  border-radius: 2px;
+  background: #d9a441;
+  color: #151b20;
+  font: 700 12px Inter, Arial, sans-serif;
+  cursor: pointer;
+}
+.clampco-consent button.secondary {
+  border-color: #69757d;
+  background: transparent;
+  color: #fff;
+}
+.clampco-consent button:focus-visible,
+.clampco-consent-settings:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.clampco-consent-settings {
+  position: fixed;
+  z-index: 9999;
+  left: 16px;
+  bottom: 16px;
+  min-height: 38px;
+  padding: 9px 12px;
+  border: 1px solid #69757d;
+  border-radius: 2px;
+  color: #fff;
+  background: #151b20;
+  font: 600 11px Inter, Arial, sans-serif;
+  cursor: pointer;
+}
+@media (max-width: 520px) {
+  .clampco-consent {
+    padding: 18px;
+  }
+  .clampco-consent-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
