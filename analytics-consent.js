@@ -34,7 +34,11 @@
   }
 
   function isThankYouPage() {
-    return window.location.pathname.replace(/\\/+$/, "") === thankYouPath;
+    var path = window.location.pathname;
+    while (path.length > 1 && path.charAt(path.length - 1) === "/") {
+      path = path.slice(0, -1);
+    }
+    return path === thankYouPath;
   }
 
   function hasRecentRfqSubmission() {
